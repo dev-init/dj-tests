@@ -9,8 +9,6 @@ max_height = 0
 def get_max_height(x, points):
     mp = [p for p in points if x == p[0]]
     mp = max(mp, key=lambda a: a[2])
-    global max_height
-    max_height = mp[2]
     return mp
 
 def get_next_point(lx2, lh, points):
@@ -25,8 +23,7 @@ def get_next_point(lx2, lh, points):
     if np:
         raising = [x for x in np if max_height < x[2]]
         if raising:
-            np = [x for x in np if max_height < x[2]]
-            return min(np, key=lambda a: a[2])
+            return min(raising, key=lambda a: a[2])
         else:
             return max(np, key=lambda a: a[2])
     else:
