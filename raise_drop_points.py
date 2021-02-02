@@ -8,8 +8,7 @@ max_height = 0
 
 def get_max_height(x, points):
     mp = [p for p in points if x == p[0]]
-    mp = max(mp, key=lambda a: a[2])
-    return mp
+    return max(mp, key=lambda a: a[2])
 
 def get_next_point(lx2, lh, points):
     np = []
@@ -19,10 +18,9 @@ def get_next_point(lx2, lh, points):
         if (x1 < lx2 and x2 < lx2 and h > max_height) or (x1 < lx2 and x2 > lx2): 
             np.append(p)    
 
-    #print(lx2, lh, max_height, np)
     if np:
         raising = [x for x in np if max_height < x[2]]
-        if raising:
+        if raising:            
             return min(raising, key=lambda a: a[2])
         else:
             return max(np, key=lambda a: a[2])
@@ -36,34 +34,35 @@ def get_np_after_gap(lx2, points):
     return None
 
 def remove_covered(points):
-    tpoints = []
-    skip = False
-    for i in range(len(points)):
+    i = 0
+    while i < len(points):
         ax1, ax2, ah = points[i]
-        if not skip:
-            tpoints.append((ax1, ax2, ah))
-        if i < len(points) - 1:
-            bx1, bx2, bh = points[i+1]
-            if bx1 < ax2 and bx2 < ax2 and bh < ah:
-                skip = True
-
-    return tpoints
-
+        j = i + 1
+        while j < len(points):
+            bx1, bx2, bh = points[j]
+            if bx1 > ax1 and bx2 < ax2 and bh < ah:
+                points.remove((bx1, bx2, bh))
+            j += 1
+        i += 1
+    return points
 
 
 def main():
-    points = [(1,5,10), (4, 6, 8), (10,15,10), (11,12,8)] 
-    # OP:  [(1,10),(5,8),(6,0),(10,10),(15,0)]
-    # points = [(1,10,4),(1,8,6),(1,6,8)] 
-    # OP: [(1,8),(6,6),(8,4),(10,0)]
-    # points = [(0,6,2),(5,10,8),(7,8,12)] 
-    # OP: [(0,2), (5,8),(7,12),(8,8) (10,0)]
+    # points = [(1, 5, 10), (4, 6, 8), (10, 15, 10), (11,12,8)] 
+    # OP: [(1, 10),(5, 8),(6, 0),(10, 10),(15, 0)]
+    # points = [(1, 10, 4),(1, 8, 6),(1, 6, 8)] 
+    # OP: [(1, 8),(6, 6),(8, 4),(10, 0)]
+    # points = [(0, 6, 2),(5, 10, 8),(7, 8, 12)] 
+    # OP: [(0,2), (5, 8),(7, 12),(8, 8) (10, 0)]q
     # points = [(0, 6, 2), (3, 12, 6), (5, 10, 8), (7, 8, 12)] 
     # OP: [(0, 2), (3, 6), (5, 8), (7, 12), (8, 8), (10, 6), (12, 0)]
     # points = [(1, 4, 4), (3, 5, 8), (6, 7, 2), (8, 13, 6), (10, 15, 10)] 
     # OP: [(1, 4), (3, 8), (5, 0), (6, 2), (7, 0), (8, 6), (10, 10), (15, 0)]
+    points = [(1, 4, 4), (2, 15, 12), (3, 5, 8), (6, 7, 2), (8, 13, 6), (10, 14, 10)] 
+    # OP: [(1, 4), (2, 11), (14, 10), (15, 0)]
 
     points = remove_covered(points)
+    # print(points)
     rd_points = []
     visited = []
 
